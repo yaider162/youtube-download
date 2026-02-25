@@ -1,30 +1,22 @@
-use std::path::PathBuf;
-use yt_dlp::Downloader;
-use yt_dlp::client::deps::Libraries;
+use cli::Commands;
+
+mod cli;
+mod videos_download;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    use std::env;
+    let args = cli::parse();
+    // println!("{:?}", args);
 
-    unsafe {
-        env::set_var("YT_DLP_NO_WARNINGS", "1");
-        env::set_var("YT_DLP_UPDATE", "0");
+    match args.command {
+        Commands::Download { url, output: _ } => {
+            print!("Xd?");
+            videos_download::basic_download(url).await?;
+        }
+        Commands::DownloadAudio { url, output: _ } => {
+            videos_download::only_audio_download(url).await?;
+        }
     }
-
-    let libraries = Libraries::new(
-        PathBuf::from("libs/yt-dlp.exe"),
-        PathBuf::from("libs/ffmpeg.exe"),
-    );
-    let downloader = Downloader::builder(libraries, "output").build().await?;
-
-    // Aqui hago la magia
-    let url = String::from(
-        "https://www.youtube.com/watch?v=WXIfT-dQtCo&pp=ygUXcHJvbWVzYXMgc29icmUgZWwgYmlkZXQ%3D",
-    );
-    let video = downloader.fetch_video_infos(url).await?;
-    let _video_path = downloader
-        .download_video(&video, "Promesas_sobre_el_bidet.mp4")
-        .await?;
-    println!("OK");
+    print!("funcciono esta monda");
     Ok(())
 }
