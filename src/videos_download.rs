@@ -23,7 +23,6 @@ pub async fn basic_download(url: String) -> Result<(), Box<dyn std::error::Error
     // es para darle extension al archivo sino da error
     let filename = format!("{}.mp4", video.title);
     let _video_path = downloader.download_video(&video, &filename).await?;
-    println!("OK");
     Ok(())
 }
 

@@ -10,7 +10,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     match args.command {
         Commands::Download { url, output: _ } => {
-            print!("Xd?");
             videos_download::basic_download(url).await?;
         }
         Commands::DownloadAudio { url, output: _ } => {
